@@ -19,12 +19,28 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="100"/>
+
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_launcher" />
+
             <TextView
                 android:id="@+id/sample_text"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:gravity="center"
                 android:text="Hello World!"
+                android:textColor="#00ff00"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -68,6 +84,25 @@
                 tools:layout_editor_absoluteX="148dp"
                 tools:layout_editor_absoluteY="425dp" />
 
+            <EditText
+                android:id="@+id/et_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="请输入您的手机号码..."
+                android:maxLines="2"
+                tools:layout_editor_absoluteX="148dp"
+                tools:layout_editor_absoluteY="425dp" />
+
+            <Button
+                android:id="@+id/bt_show_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="显示输入内容"
+                tools:layout_editor_absoluteX="148dp"
+                tools:layout_editor_absoluteY="425dp" />
+
             <Button
                 android:id="@+id/bt_exit"
                 android:layout_width="wrap_content"
@@ -76,6 +111,8 @@
                 android:text="退出"
                 tools:layout_editor_absoluteX="148dp"
                 tools:layout_editor_absoluteY="425dp" />
+
+
         </LinearLayout>
     </ScrollView>
 

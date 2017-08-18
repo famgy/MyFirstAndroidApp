@@ -31,36 +31,36 @@ public class ContactActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        Toast.makeText(ContactActivity.this, "contact-onStart", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ContactActivity.this, "contact-onStart", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(ContactActivity.this, "contact-onResume", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ContactActivity.this, "contact-onResume", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(ContactActivity.this, "contact-onPause", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ContactActivity.this, "contact-onPause", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(ContactActivity.this, "contact-onStop", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ContactActivity.this, "contact-onStop", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(ContactActivity.this, "contact-onDestroy", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ContactActivity.this, "contact-onDestroy", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Toast.makeText(ContactActivity.this, "contact-onRestart", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ContactActivity.this, "contact-onRestart", Toast.LENGTH_SHORT).show();
     }
 }

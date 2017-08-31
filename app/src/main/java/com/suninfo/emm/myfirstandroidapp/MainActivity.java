@@ -1,11 +1,16 @@
 package com.suninfo.emm.myfirstandroidapp;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +25,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 
 public class MainActivity extends Activity {
@@ -91,6 +102,15 @@ public class MainActivity extends Activity {
             }
         });
 
+        Button bt_browser = (Button)findViewById(R.id.bt_browser);
+        bt_browser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, BrowserActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button bt_contact = (Button)findViewById(R.id.bt_contact);
         bt_contact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +144,28 @@ public class MainActivity extends Activity {
                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener()
                 {
                    public void onClick(DialogInterface dialog, int which) {
+                       FileOutputStream out = null;
+                       BufferedWriter writer = null;
+
+                       final EditText et_note = (EditText) findViewById(R.id.et_note);
+                       String inputText = et_note.getText().toString();
+
+                       try{
+                           out = openFileOutput("data", Context.MODE_APPEND);
+                           writer = new BufferedWriter(new OutputStreamWriter(out));
+                           writer.write(inputText);
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                       } finally {
+                           try {
+                               if (writer != null) {
+                                   writer.close();
+                               }
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                           }
+                       }
+
                        System.exit(0);
                    }
                 });
@@ -145,6 +187,28 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 String inputText = et_note.getText().toString();
                 Toast.makeText(MainActivity.this, inputText, Toast.LENGTH_SHORT).show();;
+            }
+        });
+
+        Button bt_notify = (Button)findViewById(R.id.bt_notify);
+        bt_notify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                Notification.Builder builder = new Notification.Builder(MainActivity.this);
+                builder.setSmallIcon(R.drawable.ic_launcher);
+                builder.setTicker("新的通知");
+                builder.setContentTitle("通知");
+                builder.setContentText("点击查看详细内容");
+                builder.setWhen(System.currentTimeMillis());
+                builder.setAutoCancel(true);
+                Intent intent = new Intent(MainActivity.this, ContactActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
+                builder.setContentIntent(pendingIntent);
+
+                Notification notification = builder.build();
+                //notification.flags = Notification.FLAG_NO_CLEAR;
+                manager.notify(0, notification);
             }
         });
     }

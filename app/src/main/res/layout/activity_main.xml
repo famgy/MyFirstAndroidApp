@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
+            tools:layout_editor_absoluteY="8dp"
+            android:focusableInTouchMode="true">
 
             <ProgressBar
                 android:id="@+id/progress_bar"
@@ -65,6 +66,14 @@
                 tools:layout_editor_absoluteX="148dp"
                 tools:layout_editor_absoluteY="425dp" />
 
+            <Button
+                android:id="@+id/bt_browser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="浏览器"
+                tools:layout_editor_absoluteX="148dp"
+                tools:layout_editor_absoluteY="425dp" />
 
             <Button
                 android:id="@+id/bt_contact"
@@ -104,6 +113,15 @@
                 tools:layout_editor_absoluteY="425dp" />
 
             <Button
+                android:id="@+id/bt_notify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="发送通知"
+                tools:layout_editor_absoluteX="148dp"
+                tools:layout_editor_absoluteY="425dp" />
+
+            <Button
                 android:id="@+id/bt_exit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,7 +129,6 @@
                 android:text="退出"
                 tools:layout_editor_absoluteX="148dp"
                 tools:layout_editor_absoluteY="425dp" />
-
 
         </LinearLayout>
     </ScrollView>

@@ -7,13 +7,18 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.PersistableBundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,10 +32,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedWriter;
+import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+
+import static android.content.ContentValues.TAG;
 
 
 public class MainActivity extends Activity {
@@ -38,6 +46,10 @@ public class MainActivity extends Activity {
     ImageView imageView;
     ProgressBar progressBar;
     int progress = 0;
+    static Vibrator vibrator = null;
+    static AudioManager audioService = null;
+    static MediaPlayer mediaPlayer = null;
+    static boolean bAudioLoadered = false;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -57,6 +69,20 @@ public class MainActivity extends Activity {
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
 
+        if (null == vibrator)
+        {
+            vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        }
+
+        if (null == audioService)
+        {
+            audioService = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        }
+
+        if (null == mediaPlayer)
+        {
+            mediaPlayer = new MediaPlayer();
+        }
 
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         imageView = (ImageView) findViewById(R.id.image_view);
@@ -209,6 +235,86 @@ public class MainActivity extends Activity {
                 Notification notification = builder.build();
                 //notification.flags = Notification.FLAG_NO_CLEAR;
                 manager.notify(0, notification);
+            }
+        });
+
+        Button bt_audio = (Button)findViewById(R.id.bt_audio);
+        bt_audio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+                // check if in silent mode
+                if (audioService.getRingerMode() == AudioManager.RINGER_MODE_SILENT)
+                {
+                    Log.e("TAG","已经调成静音");
+                    return;
+                }
+
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    public void onCompletion(MediaPlayer player) {
+                        player.seekTo(0);
+                    }
+                });
+
+                AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.dione);
+                try {
+                    if (true != bAudioLoadered)
+                    {
+                        FileDescriptor fd = file.getFileDescriptor();
+                        long offset = file.getStartOffset();
+                        long length = file.getLength();
+
+                        mediaPlayer.setDataSource(fd, offset, length);
+                        file.close();
+
+                        bAudioLoadered = true;
+                    }
+                    mediaPlayer.setVolume(0.1f, 0.1f);
+
+                    mediaPlayer.prepare();
+                } catch (IOException ioe) {
+                    Log.w(TAG, ioe);
+                    mediaPlayer = null;
+                }
+
+                if (null != mediaPlayer)
+                {
+                    mediaPlayer.start();
+                }
+            }
+        });
+
+        Button bt_stop_audio = (Button)findViewById(R.id.bt_stop_audio);
+        bt_stop_audio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null != mediaPlayer)
+                {
+                    mediaPlayer.stop();
+                }
+            }
+        });
+
+        Button bt_vibrate = (Button)findViewById(R.id.bt_vibrate);
+        bt_vibrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null != vibrator) {
+                    long[] pattern = new long[] {100, 200, 100, 200};
+                    vibrator.vibrate(pattern, 0);
+                }
+            }
+        });
+
+        Button bt_stop_vibrate = (Button)findViewById(R.id.bt_stop_vibrate);
+        bt_stop_vibrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null != vibrator) {
+                    vibrator.cancel();
+                }
             }
         });
     }

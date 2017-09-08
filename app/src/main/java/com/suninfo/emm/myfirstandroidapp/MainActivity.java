@@ -11,16 +11,10 @@ import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.PersistableBundle;
 import android.os.Vibrator;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,9 +25,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.suninfo.emm.myfirstandroidapp.Fruit.FruitActivity;
+
 import java.io.BufferedWriter;
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -143,6 +138,15 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ContactActivity.class);
                 intent.putExtra("new_contact", " zhangl : 18866556699");
+                startActivity(intent);
+            }
+        });
+
+        Button bt_fruit = (Button)findViewById(R.id.bt_fruit);
+        bt_fruit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, FruitActivity.class);
                 startActivity(intent);
             }
         });

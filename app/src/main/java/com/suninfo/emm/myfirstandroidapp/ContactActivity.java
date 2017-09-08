@@ -68,7 +68,7 @@ public class ContactActivity extends Activity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 ContactActivity.this, android.R.layout.simple_list_item_1, sList);
 
-        ListView listView = (ListView) findViewById(R.id.list_view);
+        ListView listView = (ListView) findViewById(R.id.list_contact_view);
         listView.setAdapter(adapter);
     }
 

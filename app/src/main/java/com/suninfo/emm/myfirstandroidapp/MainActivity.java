@@ -1,5 +1,6 @@
 package com.suninfo.emm.myfirstandroidapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,11 +8,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Vibrator;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +38,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import static android.R.id.message;
 import static android.content.ContentValues.TAG;
 
 
@@ -51,10 +57,24 @@ public class MainActivity extends Activity {
         System.loadLibrary("native-lib");
     }
 
+    public void ask_permission(String permission)
+    {
+        String[] permissions = {permission};
+
+        if (Build.VERSION.SDK_INT >= 23)
+        {
+            int i = ContextCompat.checkSelfPermission(this, permission);
+            if (i != PackageManager.PERMISSION_GRANTED)
+            {
+                ActivityCompat.requestPermissions(this, permissions, 1);
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Toast.makeText(MainActivity.this, "main-onCreate", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "main-onCreate", Toast.LENGTH_SHORT).show();
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
@@ -62,7 +82,7 @@ public class MainActivity extends Activity {
 
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
+        tv.setText( uninstallFeedbackInit());
 
         if (null == vibrator)
         {
@@ -93,13 +113,17 @@ public class MainActivity extends Activity {
                 else if (1 == imageSwitch)
                 {
                     //progressBar.setVisibility(View.INVISIBLE);
+                    imageView.setImageResource(R.drawable.ic_launcher);
+                    imageSwitch = 0;
 
                     progress = progressBar.getProgress();
                     progress += 10;
-                    progressBar.setProgress(progress);
+                    if (progress > 100)
+                    {
+                        progress = 0;
 
-                    imageView.setImageResource(R.drawable.ic_launcher);
-                    imageSwitch = 0;
+                    }
+                    progressBar.setProgress(progress);
                 }
             }
         });
@@ -326,19 +350,19 @@ public class MainActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        //Toast.makeText(MainActivity.this, "main-onStart", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "main-onStart", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //Toast.makeText(MainActivity.this, "main-onResume", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "main-onResume", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //Toast.makeText(MainActivity.this, "main-onPause", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "main-onPause", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -363,5 +387,5 @@ public class MainActivity extends Activity {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    public native String stringFromJNI();
+    public native String uninstallFeedbackInit();
 }
